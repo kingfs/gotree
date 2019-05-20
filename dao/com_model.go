@@ -143,7 +143,7 @@ func (self *ComModel) ormOn() {
 	}
 
 	if dbconfig == "" {
-		helper.Exit("ComModel-ormOn " + self.comName + ":No database configuration information exists")
+		helper.Exit("ComModel " + self.comName + ":No database configuration information exists")
 	}
 	_, err := gtorm.GetDB(self.comName)
 	if err == nil {
@@ -159,12 +159,12 @@ func (self *ComModel) ormOn() {
 	maxIdleConns, ei := strconv.Atoi(dbMaxIdleConns)
 	maxOpenConns, eo := strconv.Atoi(dbMaxOpenConns)
 	if ei != nil || eo != nil || maxIdleConns == 0 || maxOpenConns == 0 || maxIdleConns > maxOpenConns {
-		helper.Exit("ComModel-ormOn Failure to connect " + self.comName + " db, MaxIdleConns or MaxOpenConns are invalid args")
+		helper.Exit("ComModel Failure to connect " + self.comName + " db, MaxIdleConns or MaxOpenConns are invalid args")
 	}
-	helper.Log().Notice("ComModel-ormOn Connect com " + self.comName + " database, MaxIdleConns:" + dbMaxIdleConns + ", MaxOpenConns:" + dbMaxOpenConns + ", config:" + dbconfig)
+	helper.Log().Notice("ComModel Connect com " + self.comName + " database, MaxIdleConns:" + dbMaxIdleConns + ", MaxOpenConns:" + dbMaxOpenConns + ", config:" + dbconfig)
 	err = gtorm.RegisterDataBase(self.comName, driver, dbconfig, maxIdleConns, maxOpenConns)
 	if err != nil {
-		helper.Exit("ComModel-ormOn-RegisterDataBase Connect " + self.comName + " error:," + err.Error())
+		helper.Exit("ComModel-RegisterDataBase Connect " + self.comName + " error:," + err.Error())
 	}
 }
 
@@ -221,7 +221,7 @@ func (self *ComModel) profiler(ssql string, args ...interface{}) {
 	sourceSql := fmt.Sprintf(strings.Replace(ssql, "?", "%v", -1), args...)
 	sql := strings.ToLower(sourceSql)
 	if strings.Contains(sql, "delete") || strings.Contains(sql, "update") || strings.Contains(sql, "insert") || strings.Contains(sql, "count") || strings.Contains(sql, "sum") || strings.Contains(sql, "max") {
-		helper.Log().Notice("sql profiler:", sourceSql)
+		helper.Log().Notice("sql profiler ", sourceSql)
 		return
 	}
 	var explain []struct {
@@ -250,9 +250,9 @@ func (self *ComModel) profiler(ssql string, args ...interface{}) {
 		explainLog = "explain :(" + explainLog + ")"
 	}
 	if warn {
-		helper.Log().Warning("sql profiler:", explainLog, "source :("+sourceSql+")")
+		helper.Log().Warning("sql profiler ", explainLog, "source :("+sourceSql+")")
 	} else {
-		helper.Log().Notice("sql profiler:", explainLog, "source :("+sourceSql+")")
+		helper.Log().Notice("sql profiler ", explainLog, "source :("+sourceSql+")")
 	}
 
 	gseq := dict.Get("gseq")

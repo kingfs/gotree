@@ -225,9 +225,7 @@ func (self *RpcClient) releaseJsonCall(client *rpcConn, err error) {
 }
 
 func (self *RpcClient) Close() {
-	helper.Log().Notice(" business close: Close the dao connection pool...")
 	connPool.Close()
-	helper.Log().Notice(" business close: Dao connection pool is closed")
 	return
 }
 

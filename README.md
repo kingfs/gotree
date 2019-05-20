@@ -82,7 +82,8 @@ $ go test -v -count=1 -run TestUserOrder $GOPATH/src/learning/business/unit/gate
 
 7. qps 压测
 ```sh
-$ go run $GOPATH/src/learning/business/unit/qps_press/main.go
+# 每秒 1w 请求
+$ go run $GOPATH/src/learning/business/unit/qps_press/main.go 10000
 ```
 
 ## 快速入门
