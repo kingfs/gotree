@@ -17,7 +17,7 @@ package dao
 import (
 	"fmt"
 
-	"github.com/8treenet/gotree/dao/orm"
+	"github.com/8treenet/gotree/dao/gtorm"
 	"github.com/8treenet/gotree/helper"
 	"github.com/8treenet/gotree/lib"
 	"github.com/8treenet/gotree/lib/chart"
@@ -48,8 +48,8 @@ var (
 )
 
 func init() {
-	orm.RegisterDriver("mysql", orm.DRMySQL)
-	orm.RegisterDriver("mssql", orm.DRMySQL)
+	gtorm.RegisterDriver("mysql", gtorm.DRMySQL)
+	gtorm.RegisterDriver("mssql", gtorm.DRMySQL)
 }
 
 func (self *ComModel) ComModel(child interface{}) *ComModel {
@@ -64,7 +64,7 @@ func (self *ComModel) ComModel(child interface{}) *ComModel {
 }
 
 type Conn interface {
-	Raw(query string, args ...interface{}) orm.RawSeter
+	Raw(query string, args ...interface{}) gtorm.RawSeter
 }
 
 //Orm 获取orm
@@ -76,7 +76,7 @@ func (self *ComModel) Conn() Conn {
 		helper.Exit("ComModel-Conn This is an unregistered com")
 		return nil
 	}
-	o := orm.New(self.comName)
+	o := gtorm.New(self.comName)
 	if modelProfiler {
 		o.RawCallBack(func(sql string, args []interface{}) {
 			self.profiler(sql, args...)
@@ -145,7 +145,7 @@ func (self *ComModel) ormOn() {
 	if dbconfig == "" {
 		helper.Exit("ComModel-ormOn " + self.comName + ":No database configuration information exists")
 	}
-	_, err := orm.GetDB(self.comName)
+	_, err := gtorm.GetDB(self.comName)
 	if err == nil {
 		//已注册
 		return
@@ -162,7 +162,7 @@ func (self *ComModel) ormOn() {
 		helper.Exit("ComModel-ormOn Failure to connect " + self.comName + " db, MaxIdleConns or MaxOpenConns are invalid args")
 	}
 	helper.Log().Notice("ComModel-ormOn Connect com " + self.comName + " database, MaxIdleConns:" + dbMaxIdleConns + ", MaxOpenConns:" + dbMaxOpenConns + ", config:" + dbconfig)
-	err = orm.RegisterDataBase(self.comName, driver, dbconfig, maxIdleConns, maxOpenConns)
+	err = gtorm.RegisterDataBase(self.comName, driver, dbconfig, maxIdleConns, maxOpenConns)
 	if err != nil {
 		helper.Exit("ComModel-ormOn-RegisterDataBase Connect " + self.comName + " error:," + err.Error())
 	}
@@ -229,7 +229,7 @@ func (self *ComModel) profiler(ssql string, args ...interface{}) {
 		Type  string
 	}
 	explainLog := ""
-	o := orm.New(self.comName)
+	o := gtorm.New(self.comName)
 	_, e := o.Raw("EXPLAIN "+ssql, args...).QueryRows(&explain)
 	tables := []string{}
 	warn := false
@@ -299,7 +299,7 @@ func (self *ComModel) Connections(m map[string]int) {
 	if !self.open {
 		return
 	}
-	db, err := orm.GetDB(self.comName)
+	db, err := gtorm.GetDB(self.comName)
 	if err != nil {
 		return
 	}
