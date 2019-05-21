@@ -22,6 +22,8 @@ import (
 	"strings"
 
 	"github.com/8treenet/gotree/helper"
+	_ "github.com/garyburd/redigo/redis"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
