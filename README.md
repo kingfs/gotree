@@ -498,8 +498,9 @@ $ go run main.go
         })
 
         /*
-            1.全局禁止使用go func(), 请使用Async。
-            2.底层做了优雅关闭和热更新, hook了 async。 保证会话请求的闭环执行, 防止造成脏数据。
+            1. 全局禁止使用go func(), 请使用Async。
+            2. 底层做了优雅关闭和热更新, hook了 async。 保证会话请求的闭环执行, 防止造成脏数据。
+            3. async 做了 recover 和 栈传递，可以有效的使用同gseq
         */
     }
 ```

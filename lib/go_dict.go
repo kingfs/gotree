@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/8treenet/gotree/lib/g"
+	"github.com/8treenet/gotree/helper"
 )
 
 type GoDict struct {
@@ -101,5 +101,5 @@ func (self *GoDict) Remove() {
 // }
 
 func (self *GoDict) goPoint() string {
-	return fmt.Sprint(g.RuntimePointer())
+	return fmt.Sprint(helper.RuntimePointer())
 }

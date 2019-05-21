@@ -4,6 +4,8 @@ import (
 	"errors"
 	"os"
 	"strings"
+
+	"github.com/huandu/go-tls/g"
 )
 
 var ErrBreaker = errors.New("Fuse")
@@ -26,4 +28,8 @@ func Exit(errorMsg ...string) {
 	}
 	Log().Error(errorMsg)
 	os.Exit(-1)
+}
+
+func RuntimePointer() interface{} {
+	return g.G()
 }

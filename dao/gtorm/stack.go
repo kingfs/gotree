@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/8treenet/gotree/lib/g"
+	"github.com/8treenet/gotree/helper"
 )
 
 var stackOrm map[string]Ormer
@@ -100,5 +100,5 @@ func goId() string {
 	// n := runtime.Stack(buf[:], false)
 	// idField := strings.Fields(strings.TrimPrefix(string(buf[:n]), "goroutine "))[0]
 	//return idField
-	return fmt.Sprint(g.RuntimePointer())
+	return fmt.Sprint(helper.RuntimePointer())
 }

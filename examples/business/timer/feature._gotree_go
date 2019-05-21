@@ -12,7 +12,7 @@ import (
 	1.Timer和Controller平级,属于会话请求。
 	2.全局禁止使用go func(),请使用Async。
 	3.底层做了优雅关闭和热更新, hook了 async和会话请求。 保证会话请求的闭环执行, 防止造成脏数据。
-	4.底层hook了 async和会话请求 recover和日志处理，防止panic。
+	4.async 做了 recover 和 栈传递，可以有效的使用同gseq
 */
 
 func init() {
