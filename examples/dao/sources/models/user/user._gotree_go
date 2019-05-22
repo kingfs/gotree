@@ -19,7 +19,7 @@ func init() {
 
 // Gotree
 func (self *User) Gotree() *User {
-	self.ComModel.ComModel(self)
+	self.ComModel.Gotree(self)
 	return self
 }
 

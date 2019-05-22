@@ -30,10 +30,11 @@ type comName interface {
 	Com() string
 }
 
-var _msl *lib.ServiceLocator //模型服务定位器
-var _csl *lib.ServiceLocator //缓存服务定位器
-var _esl *lib.ServiceLocator //内存服务定位器
-var _api *lib.ServiceLocator //api服务定位器
+var _msl *lib.ServiceLocator   //模型服务定位器
+var _csl *lib.ServiceLocator   //缓存服务定位器
+var _esl *lib.ServiceLocator   //内存服务定位器
+var _api *lib.ServiceLocator   //api服务定位器
+var _other *lib.ServiceLocator //其他数据源服务定位器
 var _daoOnList []comNode
 var queueMap map[string]*daoQueue
 
@@ -52,10 +53,11 @@ func init() {
 	appStart()
 	queueMap = make(map[string]*daoQueue)
 
-	_msl = new(lib.ServiceLocator).Gotree() //model数据源
-	_csl = new(lib.ServiceLocator).Gotree() //cache数据源
-	_api = new(lib.ServiceLocator).Gotree() //api数据源
-	_esl = new(lib.ServiceLocator).Gotree() //内存数据源
+	_msl = new(lib.ServiceLocator).Gotree()   //model数据源
+	_csl = new(lib.ServiceLocator).Gotree()   //cache数据源
+	_api = new(lib.ServiceLocator).Gotree()   //api数据源
+	_esl = new(lib.ServiceLocator).Gotree()   //内存数据源
+	_other = new(lib.ServiceLocator).Gotree() //其他数据源服务定位器
 
 	helper.SetGoDict(rpc.GoDict())
 	lib.SetGoDict(rpc.GoDict())
@@ -127,6 +129,21 @@ func RegisterApi(service interface{}) {
 		helper.Exit("RegisterApi duplicate registration")
 	}
 	_api.AddService(service)
+}
+
+//RegisterOther 注册其他数据源
+func RegisterOther(service interface{}) {
+	if helper.Testing() {
+		return
+	}
+	type init interface {
+		DaoInit()
+	}
+	service.(init).DaoInit()
+	if _other.CheckService(service) {
+		helper.Exit("RegisterOther duplicate registration")
+	}
+	_other.AddService(service)
 }
 
 //RegisterQueue 队列
@@ -207,6 +224,7 @@ func Run(args ...interface{}) {
 			_msl.NotitySubscribe("CacheOn", daonode.Name)
 			_msl.NotitySubscribe("MemoryOn", daonode.Name)
 			_msl.NotitySubscribe("ApiOn", daonode.Name)
+			_msl.NotitySubscribe("OtherOn", daonode.Name)
 			return nil
 		})
 	}

@@ -92,6 +92,20 @@ func (self *ComController) Memory(child interface{}) {
 	return
 }
 
+//Other 服务定位器获取其他数据源
+func (self *ComController) Other(child interface{}) {
+	apiDao := reflect.ValueOf(child).Elem().Interface().(comName).Com()
+	if self.selfName != apiDao {
+		helper.Exit("ComController--Other Not in the same com, prohibit invoking")
+	}
+
+	err := _other.Service(child)
+	if err != nil {
+		helper.Exit("ComController-Memory-Service Prohibit invoking" + err.Error())
+	}
+	return
+}
+
 //Transaction 事务
 func (self *ComController) Transaction(fun func() error) error {
 	return gtorm.Transaction(self.selfName, fun)

@@ -52,7 +52,7 @@ func init() {
 	gtorm.RegisterDriver("mssql", gtorm.DRMySQL)
 }
 
-func (self *ComModel) ComModel(child interface{}) *ComModel {
+func (self *ComModel) Gotree(child interface{}) *ComModel {
 	self.Object.Gotree(self)
 	self.AddChild(self, child)
 	self.open = false
@@ -116,11 +116,6 @@ func (self *ComModel) modelOn(arg ...interface{}) {
 	if comName == self.comName {
 		self.ormOn()
 	}
-}
-
-//Open
-func (self *ComModel) Open() bool {
-	return self.open
 }
 
 //ormOn 开启orm

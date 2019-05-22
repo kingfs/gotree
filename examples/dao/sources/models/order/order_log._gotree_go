@@ -15,7 +15,7 @@ type OrderLog struct {
 
 // Gotree
 func (self *OrderLog) Gotree() *OrderLog {
-	self.ComModel.ComModel(self)
+	self.ComModel.Gotree(self)
 	return self
 }
 

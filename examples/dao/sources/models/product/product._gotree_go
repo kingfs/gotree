@@ -19,7 +19,7 @@ type Product struct {
 
 // Gotree
 func (self *Product) Gotree() *Product {
-	self.ComModel.ComModel(self)
+	self.ComModel.Gotree(self)
 	return self
 }
 

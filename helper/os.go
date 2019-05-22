@@ -8,18 +8,24 @@ import (
 	"github.com/huandu/go-tls/g"
 )
 
-var ErrBreaker = errors.New("Fuse")
+var (
+	_testing   bool = false
+	ErrBreaker      = errors.New("Fuse")
+)
+
+func init() {
+	wd, _ := os.Getwd()
+	if strings.Contains(wd, "/unit") || strings.Contains(wd, "\\unit") {
+		_testing = true
+	}
+}
 
 type VoidValue struct {
 	Void byte
 }
 
 func Testing() bool {
-	wd, _ := os.Getwd()
-	if strings.Contains(wd, "/unit") || strings.Contains(wd, "\\unit") {
-		return true
-	}
-	return false
+	return _testing
 }
 
 func Exit(errorMsg ...string) {

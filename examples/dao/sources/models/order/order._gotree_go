@@ -15,7 +15,7 @@ func init() {
 
 // Gotree
 func (self *Order) Gotree() *Order {
-	self.ComModel.ComModel(self)
+	self.ComModel.Gotree(self)
 	return self
 }
 
