@@ -46,7 +46,7 @@ type comNode struct {
 
 func init() {
 	helper.LoadConfig("dao")
-	if helper.Config().String("sys::Mode") == "dev" {
+	if helper.Config().DefaultBool("sys::MysqlProfiler", false) {
 		modelProfiler = true
 	}
 	logOn()
